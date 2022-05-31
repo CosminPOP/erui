@@ -1,0 +1,272 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://www.blizzard.com/wow/ui/..\FrameXML\UI.xsd">
+    <Script file="erui.lua"/>
+
+    <Frame name="ERLootDropdown" inherits="UIDropDownMenuTemplate"/>
+
+    <GameTooltip name="ERTooltip" inherits="GameTooltipTemplate" parent="UIParent" hidden="true"/>
+
+    <Frame name="ErUIBG" hidden="false" parent="UIParent" enableMouse="false" framestrata="BACKGROUND">
+        <Size>
+            <AbsDimension x="2560" y="512"/>
+        </Size>
+        <Anchors>
+            <Anchor point="BOTTOM">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Layers>
+            <Layer level="BORDER">
+                <Texture name="$parentBG" file="Interface\addons\erui\images\bg">
+                    <!--                    <Size>-->
+                    <!--                        <AbsDimension x="2560" y="512"/>-->
+                    <!--                    </Size>-->
+                    <!--                    <Anchors>-->
+                    <!--                        <Anchor point="LEFT" relativeTo="LFTReadyStatusReadyCheckHealer" relativePoint="RIGHT">-->
+                    <!--                            <Offset>-->
+                    <!--                                <AbsDimension x="0" y="0"/>-->
+                    <!--                            </Offset>-->
+                    <!--                        </Anchor>-->
+                    <!--                    </Anchors>-->
+                </Texture>
+            </Layer>
+            <Layer level="ARTWORK">
+                <FontString name="afkStatus" inherits="GameFontLarge" text="YOU ARE AFK">
+                    <Size>
+                        <AbsDimension x="300" y="12"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="CENTER"/>
+                    </Anchors>
+                    <Color r="1.0" g="1.0" b="1.0"/>
+                </FontString>
+
+            </Layer>
+        </Layers>
+        <Frames>
+
+
+        </Frames>
+        <Scripts>
+            <OnUpdate>
+                ERui_OnUpdate()
+            </OnUpdate>
+        </Scripts>
+    </Frame>
+
+    <Frame name="ERuiItemTemplate" virtual="true">
+        <Size>
+            <AbsDimension x="580" y="32"/>
+        </Size>
+        <Anchors>
+            <Anchor point="LEFT">
+                <Offset>
+                    <AbsDimension x="10" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                  tile="false">
+        </Backdrop>
+        <Layers>
+            <Layer level="OVERLAY">
+                <FontString name="$parentItemName" justifyH="LEFT" inherits="GameFontNormal" text="Item Name Long Name Goes Here">
+                    <Size>
+                        <AbsDimension x="150" y="44"/>
+                    </Size>
+                    <Anchors>
+                        <Anchor point="LEFT">
+                            <Offset>
+                                <AbsDimension x="35" y="0"/>
+                            </Offset>
+                        </Anchor>
+                    </Anchors>
+                </FontString>
+            </Layer>
+        </Layers>
+        <Frames>
+            <Button name="$parentItemIcon">
+                <NormalTexture file="Interface\Icons\inv_staff_20"/>
+                <Size>
+                    <AbsDimension x="32" y="32"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentMSRoll" inherits="UIPanelButtonTemplate2" text="MS Roll">
+                <Size>
+                    <AbsDimension x="70" y="26"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentItemName" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="3" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ERui:RaidRoll(this:GetID(), 'ms')
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentOSRoll" inherits="UIPanelButtonTemplate2" text="OS Roll">
+                <Size>
+                    <AbsDimension x="70" y="26"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentMSRoll" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="3" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ERui:RaidRoll(this:GetID(), 'os')
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentRandom" inherits="UIPanelButtonTemplate2" text="Random">
+                <Size>
+                    <AbsDimension x="70" y="26"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentOSRoll" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="3" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ERui:RandomItem(this:GetID())
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentER" inherits="UIPanelButtonTemplate2" text="ER">
+                <Size>
+                    <AbsDimension x="50" y="26"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentRandom" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="13" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ER_GiveTo(nil, this:GetID(), 'me')
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+            <Button name="$parentGiveTo" inherits="UIPanelButtonTemplate2" text="Give to...">
+                <Size>
+                    <AbsDimension x="100" y="26"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="LEFT" relativeTo="$parentER" relativePoint="RIGHT">
+                        <Offset>
+                            <AbsDimension x="3" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ERui:RaidMenu(this:GetID())
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+
+        </Frames>
+    </Frame>
+
+    <Frame name="ErUILootFrame" hidden="true" toplevel="true"
+           parent="UIParent" movable="true" enableMouse="true" resizable="false">
+        <Size>
+            <AbsDimension x="584" y="100"/>
+        </Size>
+        <Anchors>
+            <Anchor point="CENTER">
+                <Offset>
+                    <AbsDimension x="0" y="0"/>
+                </Offset>
+            </Anchor>
+        </Anchors>
+        <Backdrop bgFile="Interface\DialogFrame\UI-DialogBox-Background"
+                  tile="false">
+        </Backdrop>
+
+        <Layers>
+            <Layer level="BORDER">
+            </Layer>
+        </Layers>
+        <Frames>
+
+            <Button name="ERUILootCloseButton" inherits="UIPanelCloseButton">
+                <Anchors>
+                    <Anchor point="TOPRIGHT">
+                        <Offset>
+                            <AbsDimension x="0" y="0"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+            </Button>
+
+            <Button name="$parentLCButton" inherits="UIPanelButtonTemplate2" text="Loot Council">
+                <Size>
+                    <AbsDimension x="120" y="26"/>
+                </Size>
+                <Anchors>
+                    <Anchor point="TOPLEFT">
+                        <Offset>
+                            <AbsDimension x="10" y="5"/>
+                        </Offset>
+                    </Anchor>
+                </Anchors>
+                <Scripts>
+                    <OnClick>
+                        ERui:SendToTalc()
+                    </OnClick>
+                </Scripts>
+            </Button>
+
+
+        </Frames>
+
+        <Scripts>
+            <OnLoad>
+                this:RegisterForDrag("LeftButton");
+                this:SetMovable(1);
+                this:SetUserPlaced(true);
+            </OnLoad>
+            <OnDragStart>
+                this:StartMoving();
+                this.isMoving = true;
+            </OnDragStart>
+            <OnDragStop>
+                this:StopMovingOrSizing();
+                this.isMoving = false;
+            </OnDragStop>
+        </Scripts>
+    </Frame>
+
+</Ui>
