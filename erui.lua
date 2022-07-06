@@ -138,12 +138,21 @@ function ERui:LootOpened()
             if candidate == me then
                 self.myIndex = i
             end
-            local unit = self:UnitInfo(candidate, "raid")
-            self.classes_in_raid[unit.class] = unit.class
-            if self.players_in_class[unit.class] == nil then
-                self.players_in_class[unit.class] = {}
+
+            local class = 'priest'
+            for j = 1, 40 do
+                if UnitName('raid' .. j) then
+                    if UnitName('raid' .. j) == candidate then
+                        local _, c = UnitClass('raid' .. j)
+                        class = string.lower(c)
+                    end
+                end
             end
-            table.insert(self.players_in_class[unit.class], candidate)
+            self.classes_in_raid[class] = class
+            if not self.players_in_class[class] then
+                self.players_in_class[class] = {}
+            end
+            table.insert(self.players_in_class[class], candidate)
         end
     end
 
@@ -193,35 +202,6 @@ function ERui:LootOpened()
     ErUILootFrame:Show()
 
     UIDropDownMenu_Initialize(ERLootDropdown, RaidMenu_Initialize, "MENU");
-
-    print("dropdownmenu init")
-
-end
-
-function ERui.UnitInfo(name, group)
-
-    local unitInfo = {
-        name = name,
-        class = 'priest'
-    }
-    if group == "party" then
-        for i = 0, MAX_PARTY_MEMBERS do
-            local unitName = UnitName('party' .. i)
-            if unitName == name then
-                local _, class = UnitClass('party' .. i)
-                unitInfo.class = class
-            end
-        end
-    elseif group == "raid" then
-        for i = 1, MAX_RAID_MEMBERS do
-            local unitName = UnitName('raid' .. i)
-            if unitName == name then
-                local _, class = UnitClass('party' .. i)
-                unitInfo.class = class
-            end
-        end
-    end
-    return unitInfo
 end
 
 function ERui:Init()
